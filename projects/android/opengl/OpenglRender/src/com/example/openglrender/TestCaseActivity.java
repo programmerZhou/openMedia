@@ -27,7 +27,7 @@ public class TestCaseActivity extends Activity implements Runnable, SurfaceHolde
 
 	
 	private int mCodecType = 1; // 1 h264; 2 mpeg4-2
-	private int mCodec = 1; // 0 sw_ffmpeg; 1 sw_opencore
+	private int mCodec = 2; // 0 sw_ffmpeg; 1 sw_opencore
 	private static SurfaceView mSurfaceView;
 	private SurfaceHolder holder;
 	private final String LAG = "This is a test";

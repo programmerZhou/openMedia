@@ -176,6 +176,14 @@ int upeg_load_media(int codec, const char* pkgname, UMBool isHardWare, const cha
     	}else if(codec == 1){
 			strcpy(paths + len, "/libubmedia_sw_opencore.so");
 			strcpy(load, "libubmedia_sw_opencore.so");
+    	}else if(codec == 2){
+    		strcpy(paths + len, "/libubmedia_hw_stagefright.so");
+    					strcpy(load, "libubmedia_hw_stagefright.so");
+    	}else if(codec == 3){
+    		strcpy(paths + len, "/libubmedia_hw_stagefright_jellybean43.so");
+    					strcpy(load, "libubmedia_hw_stagefright_jellybean43.so");
+    	}else{
+    		LOGE("libubmedia decode have not define");
     	}
     }
 
@@ -355,7 +363,9 @@ JNIEXPORT jint JNICALL jni_um_vdec_decode(JNIEnv * env, jobject obj, jbyteArray 
 			offset += ret;
 		}
 
-		 upeg_glrender_draw(prender, ctx->outData, ctx->outWidth, ctx->outHeight);
+		LOGD("+++++++upeg_glrender_draw entry");
+		upeg_glrender_draw(prender, ctx->outData, ctx->outWidth, ctx->outHeight);
+		LOGD("+++++++upeg_glrender_draw exit");
 
 		 env->CallStaticVoidMethod(m_upjni_class, notifyOpenglDrawCB);
 
