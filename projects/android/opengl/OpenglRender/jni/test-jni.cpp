@@ -332,6 +332,74 @@ JNIEXPORT jint JNICALL jni_um_vdec_setSurface(JNIEnv * env, jobject obj)
 }
 
 
+static void NV21toI420(UMSint8* yuv420sp, UMSint8* yuv420, int width, int height)
+{
+	//LOGD("Hello NV21toI420!");
+
+    if (yuv420sp == NULL ||yuv420 == NULL) return;
+
+    int framesize = width*height;
+    int i = 0, j = 0;
+
+    //copy y
+    for (i = 0; i < framesize; i++)
+    {
+        yuv420[i] = yuv420sp[i];
+    }
+
+    //LOGD("NV21toI420! copy y done");
+    i = 0;
+    for (j = 0; j < framesize/2; j+=2)
+    {
+        yuv420[i + framesize*5/4] = yuv420sp[j+framesize];
+        i++;
+    }
+
+    //LOGD("NV21toI420! copy v done");
+    i = 0;
+    for(j = 1; j < framesize/2;j+=2)
+    {
+        yuv420[i+framesize] = yuv420sp[j+framesize];
+        i++;
+    }
+
+    //LOGD("NV21toI420! copy u done");
+}
+
+static void NV12toI420(UMSint8* yuv420sp, UMSint8* yuv420, int width, int height)
+{
+	//LOGD("Hello NV21toI420!");
+
+    if (yuv420sp == NULL ||yuv420 == NULL) return;
+
+    int framesize = width*height;
+    int i = 0, j = 0;
+
+    //copy y
+    for (i = 0; i < framesize; i++)
+    {
+        yuv420[i] = yuv420sp[i];
+    }
+
+    //LOGD("NV21toI420! copy y done");
+    i = 0;
+    for (j = 0; j < framesize/2; j+=2)
+    {
+        yuv420[i + framesize] = yuv420sp[j+framesize];
+        i++;
+    }
+
+    //LOGD("NV21toI420! copy v done");
+    i = 0;
+    for(j = 1; j < framesize/2;j+=2)
+    {
+        yuv420[i+framesize*5/4] = yuv420sp[j+framesize];
+        i++;
+    }
+
+    //LOGD("NV21toI420! copy u done");
+}
+
 /*!
 *	\brief	main decode function,
 *	\param	in	it's nal buf
@@ -344,6 +412,7 @@ JNIEXPORT jint JNICALL jni_um_vdec_decode(JNIEnv * env, jobject obj, jbyteArray 
 	UMSint ret;
 	UMSint offset = 0;
 	int totalSize = len;
+	UMSint8 i420[576000];
 
 	jbyte * buf = (jbyte*)env->GetByteArrayElements(in, 0);
 
@@ -357,15 +426,24 @@ JNIEXPORT jint JNICALL jni_um_vdec_decode(JNIEnv * env, jobject obj, jbyteArray 
 		LOGE("outWidth is %d and outHeight is %d ", ctx->outWidth, ctx->outHeight);
 
 		if(ret < 0){
-			LOGE("decode fail.....");
+			LOGE("decode fail..... ret is %d", ret);
 			return -1;
 		}else{
 			offset += ret;
 		}
 
-		LOGD("+++++++upeg_glrender_draw entry");
+//		LOGD("+++++++NV21toI420 entry");
+//		NV21toI420(ctx->outData, i420, 800, 480);
+//		LOGD("+++++++NV21toI420 entry");
+
+		//LOGD("+++++++NV21toI420 entry");
+		//NV12toI420(ctx->outData, i420, 800, 480);
+		//LOGD("+++++++NV21toI420 entry");
+
+		//LOGD("+++++++upeg_glrender_draw entry");
 		upeg_glrender_draw(prender, ctx->outData, ctx->outWidth, ctx->outHeight);
-		LOGD("+++++++upeg_glrender_draw exit");
+		//upeg_glrender_draw(prender, i420, ctx->outWidth, ctx->outHeight);
+		//LOGD("+++++++upeg_glrender_draw exit");
 
 		 env->CallStaticVoidMethod(m_upjni_class, notifyOpenglDrawCB);
 
