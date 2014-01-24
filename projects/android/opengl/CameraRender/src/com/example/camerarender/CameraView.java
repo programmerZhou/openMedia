@@ -1,12 +1,15 @@
 package com.example.camerarender;
 
 import java.io.IOException;
+import java.util.List;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
+import android.hardware.Camera.PreviewCallback;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -32,7 +35,15 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceChanged(SurfaceHolder holder, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		Camera.Parameters parameters = mCamera.getParameters();
-		parameters.setPreviewSize(mPreviewWidth, mPreviewHeight);
+		
+		List<Integer> previewPixelFormat = parameters.getSupportedPreviewFormats();
+		
+		for(int i = 0; i < previewPixelFormat.size(); i++){
+			Log.i("camera render", "getSupportedPreviewFormats" + previewPixelFormat.get(i));
+		}
+		
+		//  这里的设置没有什么意义，在一些设备上，如果设置和硬件实际参数不匹配的话，将出现crash
+		//parameters.setPreviewSize(mPreviewWidth, mPreviewHeight);
 		parameters.setPreviewFormat(PixelFormat.YCbCr_420_SP );
 		
 		if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
@@ -44,8 +55,26 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 			mCamera.setDisplayOrientation(0); // 在2.2以上可以使用
 		}
 
+		mCamera.setParameters(parameters);
 		
-		//mCamera.setParameters(parameters);
+		mCamera.setPreviewCallback(new PreviewCallback(){
+
+			@Override
+			public void onPreviewFrame(byte[] data, Camera camera) {
+				// TODO Auto-generated method stub
+				int width = camera.getParameters().getPreviewSize().width;
+				int height = camera.getParameters().getPreviewSize().height;
+				
+				Log.e("camera callback","width is " + width + " height is " + height);
+			
+				int[] rgb = new int[width * height];
+				
+				Utils.covertYUV420SPToRGB565(rgb, data, width, height);
+				
+				MainActivity.getRender().update(rgb, width, height);
+			}
+			
+		});
 		
 		try {
 			mCamera.setPreviewDisplay(holder);
@@ -72,6 +101,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		if(null != mCamera)
         {
          
+			mCamera.setPreviewCallback(null);
 			mCamera.stopPreview(); 
 			mCamera.release();
 			mCamera = null;

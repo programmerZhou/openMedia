@@ -332,7 +332,7 @@ JNIEXPORT jint JNICALL jni_um_vdec_setSurface(JNIEnv * env, jobject obj)
 }
 
 
-static void NV21toI420(UMSint8* yuv420sp, UMSint8* yuv420, int width, int height)
+static void NV12toI420(UMSint8* yuv420sp, UMSint8* yuv420, int width, int height)
 {
 	//LOGD("Hello NV21toI420!");
 
@@ -366,7 +366,7 @@ static void NV21toI420(UMSint8* yuv420sp, UMSint8* yuv420, int width, int height
     //LOGD("NV21toI420! copy u done");
 }
 
-static void NV12toI420(UMSint8* yuv420sp, UMSint8* yuv420, int width, int height)
+static void NV21toI420(UMSint8* yuv420sp, UMSint8* yuv420, int width, int height)
 {
 	//LOGD("Hello NV21toI420!");
 
