@@ -19,10 +19,11 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+		//getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
 		mCameraView = (CameraView)findViewById(R.id.cameraview);
+		mCameraView.setContext(this);
 		mLayout = (LinearLayout)findViewById(R.id.processview_layout);
 		
 		mGlRenderView = new GLSurfaceView(this);

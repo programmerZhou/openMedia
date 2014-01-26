@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -20,6 +21,9 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	
 	private Camera mCamera = null;
 	private SurfaceHolder mSurfaceHolder = null;
+	private long mFrameRateStartTime;
+	private int mFrameRate;
+	private Context mContext;
 	
 	public CameraView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -29,6 +33,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		mSurfaceHolder.addCallback(this);
 		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
+	}
+	
+	public void setContext(Context context){
+		mContext = context;
 	}
 
 	@Override
@@ -66,10 +74,22 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				int height = camera.getParameters().getPreviewSize().height;
 				
 				Log.e("camera callback","width is " + width + " height is " + height);
+				
+				if(mFrameRateStartTime == 0){
+				      mFrameRateStartTime = System.currentTimeMillis();
+				}
+				mFrameRate ++;
+				  if(mFrameRate % 30 == 0){
+				      long rate = mFrameRate * 1000 / (System.currentTimeMillis() - mFrameRateStartTime);
+				      Toast.makeText(mContext, "Frame Rate:" + rate, Toast.LENGTH_SHORT)
+				      .show();
+				  }
 			
 				int[] rgb = new int[width * height];
 				
+
 				Utils.covertYUV420SPToRGB565(rgb, data, width, height);
+				//Utils.covertYUV420SPToARGBTable(rgb, data, width, height);
 				
 				MainActivity.getRender().update(rgb, width, height);
 			}
@@ -109,5 +129,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         
         mSurfaceHolder = null;
 	}
+	
 
 }
