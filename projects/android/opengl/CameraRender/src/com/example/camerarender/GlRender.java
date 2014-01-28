@@ -22,7 +22,6 @@ public class GlRender implements GLSurfaceView.Renderer {
 		// TODO Auto-generated constructor stub
 		
 		mContext = context;
-		mTexture = new TextureVideo();
 		
 		mBitmap =  BitmapFactory.decodeResource(mContext.getResources(), R.drawable.img_3);
         mTexture = new TextureVideo();
