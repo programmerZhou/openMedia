@@ -418,20 +418,22 @@ JNIEXPORT jint JNICALL jni_um_vdec_decode(JNIEnv * env, jobject obj, jbyteArray 
 
 	LOGE("buf is 0x%x  0x%x 0x%x 0x%x and length  is %d",buf[0],buf[1],buf[2],buf[4],len);
 
-	do{
+//	do{
 
-		if(offset >= totalSize) break;
+//		if(offset >= totalSize) break;
 
 		ret = upeg_vdec_decode(ctx, (UMSint8* )(buf + offset), totalSize - offset);
 		LOGE("outWidth is %d and outHeight is %d ", ctx->outWidth, ctx->outHeight);
 
-		if(ret < 0){
-			LOGE("decode fail..... ret is %d", ret);
-			return -1;
-		}else{
-			offset += ret;
-		}
+//		if(ret < 0){
+//			LOGE("decode fail..... ret is %d", ret);
+//			return -1;
+//		}else{
+//			offset += ret;
+//
+//		}
 
+		LOGE("decode done------- ctx->outDataLen is %d", ctx->outDataLen);
 //		LOGD("+++++++NV21toI420 entry");
 //		NV21toI420(ctx->outData, i420, 800, 480);
 //		LOGD("+++++++NV21toI420 entry");
@@ -441,13 +443,15 @@ JNIEXPORT jint JNICALL jni_um_vdec_decode(JNIEnv * env, jobject obj, jbyteArray 
 		//LOGD("+++++++NV21toI420 entry");
 
 		//LOGD("+++++++upeg_glrender_draw entry");
+		if(ctx->outDataLen == 0) return 0;
+
 		upeg_glrender_draw(prender, ctx->outData, ctx->outWidth, ctx->outHeight);
 		//upeg_glrender_draw(prender, i420, ctx->outWidth, ctx->outHeight);
 		//LOGD("+++++++upeg_glrender_draw exit");
 
 		 env->CallStaticVoidMethod(m_upjni_class, notifyOpenglDrawCB);
 
-	}while(ret > 0 && totalSize > 0);
+//	}while(ret > 0 && totalSize > 0);
 
 
 	env->ReleaseByteArrayElements(in, buf, 0); 
