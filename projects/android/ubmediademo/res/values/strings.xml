@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">UbmediaDemo</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+	<string name="stats">Start</string>
+    <string name="gSettings">Global Settings</string>
+	<string name="enableVideo">Video Receive</string>
+    <string name="remoteIp">Remote IP address</string>
+    <string name="tag">ubmedia demo</string>
+    <string name="statsOn">ubmedia demo</string>
+    
+</resources>

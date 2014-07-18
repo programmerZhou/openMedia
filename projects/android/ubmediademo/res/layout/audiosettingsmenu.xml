@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
+  <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="24dip"
+            android:text="Audio Settings">
+  </TextView>
+  <TextView android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_width="wrap_content"
+            android:text="CodecType">
+  </TextView>
+  <Spinner android:id="@+id/spAudioCodecType"
+           android:layout_height="wrap_content"
+           android:layout_width="fill_parent">
+  </Spinner>
+  <LinearLayout android:layout_height="wrap_content"
+                android:layout_width="fill_parent">
+ 		<RadioGroup android:id="@+id/rAudioRenderMechanism"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+      		<RadioButton android:id="@+id/rAudioTrack"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="AudioTrack"
+                   android:checked="true"
+                   android:textColor="#fff"/>
+      		<RadioButton android:id="@+id/rAudioNativeTrack"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="AudioNativeTrack"
+                   android:textColor="#fff" />
+      		<RadioButton android:id="@+id/rOpenSLES"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="OpenSLES"
+                   android:textColor="#fff" />
+    	</RadioGroup>
+  </LinearLayout>
+
+
+</LinearLayout>
